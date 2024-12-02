@@ -16,9 +16,8 @@ const { values, positionals } = parseArgs({
 
 const readFile = async (path: string) => {
     const input = await Bun.file(path);
-    if (!input.exists()) {
-        console.error("File not found");
-        return;
+    if (!await input.exists()) {
+        return null;
     }
     return await input.text();
 };
@@ -41,6 +40,7 @@ async function solve(day?: string) {
 
     // Run the test input if it exists
     const testInput = await readTestInput(day);
+
     if (testInput) {
         import("./solutions/" + day + ".ts").then((module) => {
             console.log("Running test input for day " + day);
@@ -49,6 +49,8 @@ async function solve(day?: string) {
             console.log("Solution B:");
             module.solutionB(testInput);
             console.log("----------------------------");
+        }).catch((e) => {
+            console.error("No solution found for day " + day);
         });
     }
 
@@ -65,6 +67,8 @@ async function solve(day?: string) {
         module.solutionA(input);
         console.log("Solution B:");
         module.solutionB(input);
+    }).catch((e) => {
+        console.error("No solution found for day " + day);
     });
 }
 
