@@ -1,4 +1,4 @@
-import { makeCount, makeLines, makeWords, zip } from "../utils";
+import { countWith, makeCount, makeLines, makeNumbers, makeWords, zip } from "../utils";
 
 /***
  * Day 1: Historian Hysteria
@@ -10,9 +10,9 @@ export const solutionA = (input: string) => {
     const right: number[] = [];
 
     makeLines(input).forEach((line) => {
-        const [a, b] = makeWords(line);
-        left.push(parseInt(a));
-        right.push(parseInt(b));
+        const [a, b] = makeNumbers(line);
+        left.push(a);
+        right.push(b);
     });
 
     left.sort();
@@ -20,13 +20,9 @@ export const solutionA = (input: string) => {
 
     const pairs = zip(left, right);
 
-    let acc = 0;
+    const result = countWith(pairs, ([a, b]) => Math.abs(a - b));
 
-    pairs.forEach(([a, b]) => {
-        acc += Math.abs(a - b);
-    });
-
-    console.log(acc);
+    console.log(result);
 }
 
 export const solutionB = (input: string) => {
@@ -35,18 +31,14 @@ export const solutionB = (input: string) => {
     const right: number[] = [];
 
     makeLines(input).forEach((line) => {
-        const [a, b] = makeWords(line);
-        left.push(parseInt(a));
-        right.push(parseInt(b));
+        const [a, b] = makeNumbers(line);
+        left.push(a);
+        right.push(b);
     });
 
     const count = makeCount(right);
 
-    let acc = 0;
+    const result = countWith(left, (ele) => ele * (count.get(ele) || 0));
 
-    left.forEach((ele) => {
-        acc += ele * (count.get(ele) || 0);
-    });
-
-    console.log(acc);
+    console.log(result);
 }

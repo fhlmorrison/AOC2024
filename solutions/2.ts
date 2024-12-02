@@ -1,6 +1,7 @@
-import { makeLines, makeWords } from "../utils";
+import { countIf, makeLines, makeNumberMatrix, makeWords } from "../utils";
+
 /***
- * Day 0: Template
+ * Day 0: Red-Nosed Reports
  */
 
 // Check if a record is safe
@@ -34,30 +35,14 @@ const isSafe2 = (num: number[]) => {
 
 export const solutionA = (input: string) => {
 
-    const lines = makeLines(input);
+    const nums = makeNumberMatrix(input);
 
-    const nums = lines.map(line => makeWords(line).map(Number));
-
-    let acc = 0;
-
-    nums.forEach(num => {
-        acc += isSafe(num) ? 1 : 0;
-    });
-
-    console.log(acc);
+    console.log(countIf(nums, isSafe));
 }
 
 export const solutionB = (input: string) => {
 
-    const lines = makeLines(input);
-
-    const nums = lines.map(line => makeWords(line).map(Number));
-
-    let acc = 0;
-
-    nums.forEach(num => {
-        acc += isSafe2(num) ? 1 : 0;
-    });
-
-    console.log(acc);
+    const nums = makeNumberMatrix(input);
+    
+    console.log(countIf(nums, isSafe2));
 }
