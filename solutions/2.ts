@@ -1,4 +1,4 @@
-import { countIf, makeLines, makeNumberMatrix, makeWords } from "../utils";
+import { countIf, makeLines, makeNumberMatrix, makeWords, windows } from "../utils";
 
 /***
  * Day 0: Red-Nosed Reports
@@ -6,18 +6,13 @@ import { countIf, makeLines, makeNumberMatrix, makeWords } from "../utils";
 
 // Check if a record is safe
 const isSafe = (num: number[]) => {
-    let safe = true;
     let dir = Math.sign(num[0] - num[1]);
-    for (let i = 0; i < num.length - 1; i++) {
-        let diff = Math.abs(num[i] - num[i + 1]);
-        if (diff > 3 || diff < 1) {
-            safe = false;
-        }
-        if (dir !== Math.sign(num[i] - num[i + 1])) {
-            safe = false;
-        }
-    }
-    return safe;
+
+    return windows(num, 2).every(([a, b]) => {
+        const diff = a - b;
+        const abs = Math.abs(diff);
+        return abs <= 3 && abs >= 1 && Math.sign(diff) === dir;
+    });
 }
 
 // Try removing each element and checking if the record is safe
@@ -43,6 +38,6 @@ export const solutionA = (input: string) => {
 export const solutionB = (input: string) => {
 
     const nums = makeNumberMatrix(input);
-    
+
     console.log(countIf(nums, isSafe2));
 }
