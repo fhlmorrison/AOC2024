@@ -32,6 +32,6 @@ bun run load "<day_number>"
 ### Generateing Solution Files
 To generate a new solution file, run
 ```bash
-bun run load "<day_number>"
+bun run new "<day_number>"
 ```
 To change the template, edit `solutions/0.ts`
