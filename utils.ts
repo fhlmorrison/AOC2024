@@ -21,10 +21,24 @@ export function zip<T>(arr1: Array<T>, arr2: Array<T>): Array<[T, T]> {
  */
 export function countIf<T>(
   arr: Array<T>,
-  predicate: (val: T) => boolean
+  predicate: (currentValue: T, currentIndex: number, array: T[]) => boolean
 ): number {
-  return arr.reduce((acc, val) => acc + (predicate(val) ? 1 : 0), 0);
+  return arr.reduce(
+    (acc, val, idx, arr) => acc + (predicate(val, idx, arr) ? 1 : 0),
+    0
+  );
 }
+
+/**
+ * Checks if x and y are within the bounds of matrix
+ * @param matrix Matrix to check bounds of
+ * @param x X coordinate to check
+ * @param y Y coordinate to check
+ * @returns true if x and y are within the bounds of matrix, false otherwise
+ */
+export const checkMatrixBounds = (matrix: string[][], x: number, y: number) => {
+  return x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length;
+};
 
 /**
  * Sums the result of applying F to each element in arr
@@ -32,8 +46,11 @@ export function countIf<T>(
  * @param F function to generate a number from each element
  * @returns sum of F applied to each element in arr
  */
-export function countWith<T>(arr: Array<T>, F: (val: T) => number): number {
-  return arr.reduce((acc, val) => acc + F(val), 0);
+export function countWith<T>(
+  arr: Array<T>,
+  F: (val: T, index: number, array: T[]) => number
+): number {
+  return arr.reduce((acc, val, i, arr) => acc + F(val, i, arr), 0);
 }
 
 /**
@@ -145,6 +162,10 @@ export function makeNumberMatrix(
   return makeLines(input).map((line) => line.split(delimiter).map(Number));
 }
 
+export function copyMatrix<T>(matrix: T[][]) {
+  return matrix.map((r) => [...r]);
+}
+
 /**
  * Creates windows of size size from arr
  * @param arr array to split into windows
@@ -163,14 +184,14 @@ export function windows<T>(arr: T[], size: number): T[][] {
  * @example DIRECTIONS_MAP["E"] -> [0, 1]
  */
 export const DIRECTIONS_MAP = {
-  E: [0, 1],
-  W: [0, -1],
-  S: [1, 0],
   N: [-1, 0],
-  SE: [1, 1],
+  E: [0, 1],
+  S: [1, 0],
+  W: [0, -1],
   NW: [-1, -1],
-  SW: [1, -1],
   NE: [-1, 1],
+  SE: [1, 1],
+  SW: [1, -1],
 };
 
 /**
@@ -183,6 +204,7 @@ export const OCTO_DIRECTIONS = Object.values(DIRECTIONS_MAP);
 /**
  * Array of directions as pairs of [dx, dy]
  * (does not include center [0, 0])
+ * Order is N, E, S, W (clockwise)
  * @example QUAD_DIRECTIONS[0] -> [0, 1] // E
  */
 export const QUAD_DIRECTIONS = OCTO_DIRECTIONS.slice(0, 4);
