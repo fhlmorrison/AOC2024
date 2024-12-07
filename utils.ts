@@ -215,3 +215,19 @@ export const QUAD_DIRECTIONS = OCTO_DIRECTIONS.slice(0, 4);
  * @example NINE_GRID_OFFSETS[0] -> [0, 0] // Center
  */
 export const NINE_GRID_OFFSETS = [[0, 0], ...OCTO_DIRECTIONS];
+
+/**
+ * Generates all permutations of length length with values from 0 to n - 1 (duplicate values allowed)
+ * Only works for n <= 10
+ * @param n Number of possible values for each position
+ * @param length Length of permutations
+ * @returns Array of all permutations of length length with values from 0 to n - 1
+ */
+export const generatePermutations = (n: number, length: number) => {
+  const permutations = [];
+  for (let i = 0; i < n ** length; i++) {
+    const ternary = i.toString(n).padStart(length, "0");
+    permutations.push(ternary.split("").map((t) => Number(t)));
+  }
+  return permutations;
+};
