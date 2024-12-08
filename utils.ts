@@ -231,3 +231,26 @@ export const generatePermutations = (n: number, length: number) => {
   }
   return permutations;
 };
+
+/**
+ * Generates greatest common divisor of a and b
+ * @param a First number
+ * @param b Second number
+ * @returns Greatest common divisor of a and b
+ */
+export const greatestCommonDivisor = (a: number, b: number): number => {
+  if (b === 0) {
+    return a;
+  }
+  return greatestCommonDivisor(b, a % b);
+};
+
+/**
+ * Generates least common multiple of a and b
+ * @param a First number
+ * @param b Second number
+ * @returns Least common multiple of a and b
+ */
+export const leastCommonMultiple = (a: number, b: number): number => {
+  return (a * b) / greatestCommonDivisor(a, b);
+};
