@@ -36,7 +36,7 @@ export function countIf<T>(
  * @param y Y coordinate to check
  * @returns true if x and y are within the bounds of matrix, false otherwise
  */
-export const checkMatrixBounds = (matrix: string[][], x: number, y: number) => {
+export const checkMatrixBounds = <T>(matrix: T[][], x: number, y: number) => {
   return x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length;
 };
 
@@ -253,4 +253,60 @@ export const greatestCommonDivisor = (a: number, b: number): number => {
  */
 export const leastCommonMultiple = (a: number, b: number): number => {
   return (a * b) / greatestCommonDivisor(a, b);
+};
+
+/**
+ * Find valid (in bounds) neighbours in grid of [x, y] using directionsToCheck, defaults to OCTO_DIRECTIONS
+ * @param matrix Grid to find neighbours in
+ * @param x X coordinate to find neighbours of
+ * @param y Y coordinate to find neighbours of
+ * @param directionsToCheck Array of offsets to check, defaults to OCTO_DIRECTIONS
+ * @returns Array of coordinates of neighbours of [x, y]
+ */
+export const findNeighbours = <T>(
+  matrix: T[][],
+  x: number,
+  y: number,
+  directionsToCheck: number[][] = OCTO_DIRECTIONS
+) => {
+  return directionsToCheck
+    .map(([dx, dy]) => [x + dx, y + dy])
+    .filter(([nx, ny]) => checkMatrixBounds(matrix, nx, ny));
+};
+
+/**
+ * Find valid neighbours in wrapping matrix of [x, y] using directionsToCheck, defaults to OCTO_DIRECTIONS
+ * @param matrix Grid to find neighbours in
+ * @param x X coordinate to find neighbours of
+ * @param y Y coordinate to find neighbours of
+ * @param directionsToCheck Array of offsets to check, defaults to OCTO_DIRECTIONS
+ * @returns Array of coordinates of neighbours of [x, y]
+ */
+export const findNeighboursWrapping = <T>(
+  matrix: T[][],
+  x: number,
+  y: number,
+  directionsToCheck: number[][] = OCTO_DIRECTIONS
+) => {
+  return directionsToCheck.map(([dx, dy]) => [
+    (x + dx) % matrix[0].length,
+    y + (dy % matrix.length),
+  ]);
+};
+
+/**
+ * Filter elements of matrix that satisfy predicate, returns coordinates of elements
+ * @param matrix Grid to filter
+ * @param predicate Function to test each element accepts params: (value, x, y)
+ * @returns Array of coordinates of elements that satisfy predicate
+ */
+export const filterCoords = <T>(
+  matrix: T[][],
+  predicate: (val: T, x: number, y: number) => boolean
+) => {
+  return matrix.flatMap((row, y) =>
+    row
+      .map((cell, x) => (predicate(cell, x, y) ? [x, y] : null))
+      .filter((x) => x != null)
+  );
 };
