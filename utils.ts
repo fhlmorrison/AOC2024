@@ -98,7 +98,7 @@ export function makeWords(
   input: string,
   delimiter: string | RegExp = /\s+/
 ): string[] {
-  return input.split(delimiter);
+  return input.split(delimiter).filter((x) => !!x);
 }
 
 /**
