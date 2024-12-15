@@ -12,6 +12,9 @@ const { values, positionals } = parseArgs({
     test: {
       type: "boolean",
     },
+    real: {
+      type: "boolean",
+    },
   },
   strict: true,
   allowPositionals: true,
@@ -41,10 +44,15 @@ async function solve(day?: string) {
     return;
   }
 
+  if (values.test && values.real) {
+    console.error("Please provide only one of --test or --real");
+    return;
+  }
+
   // Run the test input if it exists
   const testInput = await readTestInput(day);
 
-  if (testInput) {
+  if (testInput && !values.real) {
     import("./solutions/" + day + ".ts")
       .then((module) => {
         console.log("Running test input for day " + day);
