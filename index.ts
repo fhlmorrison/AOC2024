@@ -60,7 +60,7 @@ async function solve(day?: string) {
         module.solutionA(testInput);
         console.log("Solution B:");
         module.solutionB(testInput);
-        console.log("----------------------------");
+        console.log("-----------------------------");
       })
       .catch((e) => {
         console.error("No solution found for day " + day + e);
